@@ -113,6 +113,8 @@ enum StatType {
   kFragmentation,
   kPeakBytesInUse,
   kRequestedBytes,
+  kAllocationBytes,
+  kAddress,
   kTensorShapes,
   // Device trace arguments.
   kDeviceId,
@@ -130,6 +132,7 @@ enum StatType {
   kTfOp,
   kHloOp,
   kHloModule,
+  kEquation,
   // Performance counter related.
   kRawValue,
   kScaledValue,

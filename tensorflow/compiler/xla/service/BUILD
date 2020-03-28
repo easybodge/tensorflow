@@ -2228,6 +2228,7 @@ cc_library(
         ":while_loop_analysis",
         "//tensorflow/compiler/xla:shape_util",
         "//tensorflow/compiler/xla:statusor",
+        "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/container:flat_hash_set",
         "@com_google_absl//absl/strings",
@@ -2404,6 +2405,7 @@ cc_library(
         "//tensorflow/compiler/xla:status",
         "//tensorflow/compiler/xla:statusor",
         "//tensorflow/compiler/xla:types",
+        "//tensorflow/compiler/xla:util",
         "//tensorflow/compiler/xla:window_util",
         "//tensorflow/core/platform:macros",
         "@com_google_absl//absl/container:flat_hash_map",
@@ -3743,6 +3745,9 @@ xla_test(
     backends = [
         "cpu",
         "gpu",
+    ],
+    tags = [
+        "no_windows",  # TODO(b/152037541)
     ],
     deps = [
         ":hlo_parser",

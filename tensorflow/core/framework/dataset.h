@@ -628,14 +628,6 @@ class IteratorBase {
     return input->SaveInternal(ctx, writer);
   }
 
-  // TODO(jsimsa): Remove this override when all callers are migrated to the
-  // override that uses SerializationContext.
-  Status SaveInput(IteratorStateWriter* writer,
-                   const std::unique_ptr<IteratorBase>& input) {
-    SerializationContext ctx(/*params=*/{});
-    return input->SaveInternal(&ctx, writer);
-  }
-
   // This is needed so that sub-classes of IteratorBase can call
   // `RestoreInternal` on their input iterators.
   Status RestoreInput(IteratorContext* ctx, IteratorStateReader* reader,
@@ -648,16 +640,7 @@ class IteratorBase {
   // This method is used to store the state of the iterator in a checkpoint.
   // implementations have an override.
   virtual Status SaveInternal(SerializationContext* ctx,
-                              IteratorStateWriter* writer) {
-    return SaveInternal(writer);
-  }
-
-  // TODO(jsimsa): Remove this override when all subclasses are migrated to the
-  // override that accepts SerializationContext and make that override pure
-  // virtual.
-  virtual Status SaveInternal(IteratorStateWriter* writer) {
-    return errors::Unimplemented("checkpointing is not supported");
-  }
+                              IteratorStateWriter* writer) = 0;
 
   // Restores the state of this iterator.
   //
@@ -1072,6 +1055,8 @@ class DatasetOpKernel : public OpKernel {
   // Indicates whether the given op corresponds to an op whose kernels subclass
   // the `DatasetOpKernel` class.
   static bool IsDatasetOp(const OpDef* op_def);
+
+  string TraceString(OpKernelContext* ctx, bool verbose) override;
 
  protected:
   // Subclasses should implement this method. It will be called during Compute

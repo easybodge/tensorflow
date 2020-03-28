@@ -30,6 +30,10 @@ PYBIND11_MODULE(_pywrap_tensorflow_lite_calibration_wrapper, m) {
         return ::CalibrationWrapper::CreateWrapperCPPFromBuffer(data.ptr());
       }))
       .def("Prepare",
+           [](CalibrationWrapper& self, py::handle& input_shapes) {
+             return tensorflow::pyo_or_throw(self.Prepare(input_shapes.ptr()));
+           })
+      .def("Prepare",
            [](CalibrationWrapper& self) {
              return tensorflow::pyo_or_throw(self.Prepare());
            })
@@ -41,16 +45,14 @@ PYBIND11_MODULE(_pywrap_tensorflow_lite_calibration_wrapper, m) {
       .def("QuantizeModel",
            [](CalibrationWrapper& self, int input_py_type, int output_py_type,
               bool allow_float, bool enable_mlir_quantizer) {
-             return tensorflow::pyo_or_throw(
-                 self.QuantizeModel(input_py_type, output_py_type, allow_float,
-                                    enable_mlir_quantizer));
+             return tensorflow::pyo_or_throw(self.QuantizeModel(
+                 input_py_type, output_py_type, allow_float));
            })
       .def("QuantizeModel",
            [](CalibrationWrapper& self, int input_py_type, int output_py_type,
               bool allow_float) {
-             return tensorflow::pyo_or_throw(
-                 self.QuantizeModel(input_py_type, output_py_type, allow_float,
-                                    /*enable_mlir_quantizer=*/false));
+             return tensorflow::pyo_or_throw(self.QuantizeModel(
+                 input_py_type, output_py_type, allow_float));
            })
       .def("QuantizeModel", [](CalibrationWrapper& self, int input_py_type,
                                int output_py_type, bool allow_float,
